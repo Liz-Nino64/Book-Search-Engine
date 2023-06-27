@@ -27,7 +27,9 @@ const LoginForm = () => {
     }
 
     try {
-      const response = await login(userFormData);
+      const response = await login({
+        variables: { userFormData },
+      });
 
       if (error) {
         throw new Error('something went wrong!');
