@@ -1,8 +1,3 @@
-/* TODO: Remove the useEffect() Hook that sets the state for UserData.
-Instead, use the useQuery() Hook to execute the GET_ME query on load and save it to a variable named userData.
-
-- TODO: Use the useMutation() Hook to execute the REMOVE_BOOK mutation in the handleDeleteBook() function instead of the deleteBook() function that's imported from API file. (Make sure you keep the removeBookId() function in place!) */
-
 import React, { useState } from 'react';
 import {
   Container,
@@ -14,21 +9,21 @@ import {
 import { GET_ME } from '../queries';
 import { REMOVE_BOOK } from '../mutations';
 import { useQuery } from '@apollo/client';
-import { deleteBook } from '../utils/API';
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
 const SavedBooks = () => {
-  const [userData, setUserData] = useState({});
-  const [getMe, userData] = useQuery(GET_ME);
+  let userData = useState({});
+  let [ setUserData]  = useState({});
+  let [getMe] = useQuery(GET_ME);
 
-const userData = getMe({
-  variables: {  },
+  let userData = getMe({
+  variables: { _id, savedBooks },
 });
  
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
-  const handleDeleteBook = async (bookId) => {
+  const HandleDeleteBook = async (bookId) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
@@ -36,7 +31,10 @@ const userData = getMe({
     }
 
     try {
-      const response = await deleteBook(bookId, token);
+      const [deleteBook] = useMutation(REMOVE_BOOK)
+      const response = await deleteBook({
+        variables: { bookId, token }
+      });
 
       if (!response.ok) {
         throw new Error('something went wrong!');
@@ -79,7 +77,7 @@ const userData = getMe({
                     <Card.Title>{book.title}</Card.Title>
                     <p className='small'>Authors: {book.authors}</p>
                     <Card.Text>{book.description}</Card.Text>
-                    <Button className='btn-block btn-danger' onClick={() => handleDeleteBook(book.bookId)}>
+                    <Button className='btn-block btn-danger' onClick={() => HandleDeleteBook(book.bookId)}>
                       Delete this Book!
                     </Button>
                   </Card.Body>
