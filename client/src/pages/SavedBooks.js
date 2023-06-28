@@ -13,7 +13,7 @@ import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
 const SavedBooks = () => {
-  let [ userData, setUserData]  = useState({});
+  let [ setUserData]  = useState({});
   let [getMe] = useQuery(GET_ME);
 
   let userData = getMe() {
